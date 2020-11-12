@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import pandas as pd
 from transform import *
 
@@ -20,8 +21,8 @@ latitude = []
 longitude = []
 altitude = []
 
-lat_np = df["Latitude"].values
-lon_np = df["Longitude"].values
+lat_np = np.abs(df["Latitude"].values)
+lon_np = np.abs(df["Longitude"].values)
 
 for i in range(data_len):
     coord_np = transform.exec(lat_np[i], lon_np[i], 0)
