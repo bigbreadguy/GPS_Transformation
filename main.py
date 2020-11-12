@@ -2,11 +2,15 @@ import os
 import pandas as pd
 from transform import *
 
+fname = "gps_data_jaesung.csv"
+
 cwd_dir = os.getcwd()
 
-data_dir = os.path.join(cwd_dir, "data", "gps_data_ground.csv")
+data_dir = os.path.join(cwd_dir, "data", fname)
 
 df = pd.read_csv(data_dir)
+
+data_len = len(df)
 
 transform = Transform()
 
@@ -16,10 +20,19 @@ latitude = []
 longitude = []
 altitude = []
 
-for i in range(len(df)):
-    lat, lon, alt = transform.exec(df["Latitude"].values[i], df["Longitude"].values[i])
-    latitude.append(lat)
-    longitude.append(lon)
-    altitude.append(alt)
+lat_np = df["Latitude"].values
+lon_np = df["Longitude"].values
 
-result.to_csv("result.csv")
+for i in range(data_len):
+    coord_np = transform.exec(lat_np[i], lon_np[i], 0)
+    latitude.append(coord_np[0])
+    longitude.append(coord_np[1])
+    altitude.append(coord_np[2])
+
+result["latitude"] = latitude
+result["longitude"] = longitude
+result["altitude"] = altitude
+
+result_dir = os.path.join(cwd_dir, "result", fname)
+
+result.to_csv(result_dir)
